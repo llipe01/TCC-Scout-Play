@@ -1,0 +1,592 @@
+/* =====================================================================
+   Tema (claro/escuro), botão de ocultar menu e barra flutuante.
+   Carregado depois de styles.css. O tema escuro é o padrão (variáveis
+   originais); o claro é ativado por <html data-theme="light">.
+   ===================================================================== */
+
+:root {
+  color-scheme: dark;
+}
+
+body {
+  transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+/* ---------- Botões do menu lateral (tema + ocultar) ---------- */
+.nav {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  align-self: flex-start;
+}
+
+.nav-tools {
+  margin-top: auto;
+  display: grid;
+  gap: 5px;
+  padding-top: 18px;
+}
+
+.nav-tools + .logout {
+  margin-top: 0;
+}
+
+.nav-tools button {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  background: transparent;
+  text-align: left;
+  padding: 13px 14px;
+  border-radius: 10px;
+  color: #8ca0b8;
+  font-size: 14px;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.nav-tools .theme-toggle {
+  justify-content: flex-start;
+}
+
+.nav-tools button svg {
+  flex: none;
+  color: #7d91aa;
+}
+
+.nav-tools button:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: #fff;
+}
+
+/* ---------- Botão de tema reutilizável ---------- */
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.theme-toggle.floating-theme {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  z-index: 20;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: var(--panel);
+  color: var(--text);
+  border: 1px solid var(--line);
+  box-shadow: 0 8px 22px var(--shadow);
+  transition: transform 0.15s ease;
+}
+
+.theme-toggle.floating-theme:hover {
+  transform: scale(1.06);
+}
+
+/* ---------- Barra flutuante (menu oculto) ---------- */
+.nav-dock {
+  position: fixed;
+  left: 50%;
+  bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+  transform: translateX(-50%);
+  z-index: 90;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: max-content;
+  max-width: calc(100vw - 16px);
+  padding: 8px 10px;
+  border-radius: 999px;
+  background: rgba(13, 27, 45, 0.88);
+  border: 1px solid var(--line);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  animation: dock-in 0.25s ease;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.nav-dock::-webkit-scrollbar {
+  display: none;
+}
+
+@keyframes dock-in {
+  from {
+    opacity: 0;
+    transform: translate(-50%, 14px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}
+
+.dock-btn {
+  flex: 0 1 44px;
+  min-width: 30px;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: transparent;
+  color: #8ca0b8;
+  transition: background-color 0.15s ease, color 0.15s ease, transform 0.15s ease;
+}
+
+.dock-btn b {
+  font-size: 19px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.dock-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+  transform: translateY(-2px);
+}
+
+.dock-btn.active {
+  background: rgba(8, 124, 255, 0.14);
+  color: var(--green);
+  box-shadow: inset 0 0 0 1px rgba(8, 124, 255, 0.35);
+}
+
+.dock-sep {
+  flex: 0 0 auto;
+  width: 1px;
+  height: 24px;
+  margin: 0 4px;
+  background: var(--line);
+}
+
+/* Com o menu oculto: espaço para a barra não cobrir o conteúdo e toasts acima dela */
+body.nav-hidden .main {
+  padding-bottom: 110px;
+}
+
+body.nav-hidden .toast-stack {
+  bottom: calc(92px + env(safe-area-inset-bottom, 0px));
+}
+
+/* =====================================================================
+   TEMA CLARO
+   ===================================================================== */
+:root[data-theme='light'] {
+  color-scheme: light;
+  --bg: #f2f5fa;
+  --panel: #ffffff;
+  --panel-strong: #ffffff;
+  --line: #dbe3ee;
+  --muted: #5b6c83;
+  --text: #0f1b2d;
+  --green: #075edb;
+  --blue: #1f6fd1;
+  --card: #ffffff;
+  --card-soft: #f1f5fb;
+  --shadow: rgba(30, 50, 80, 0.1);
+}
+
+/* Menu lateral */
+:root[data-theme='light'] .nav {
+  background: linear-gradient(180deg, #ffffff, #f5f8fc);
+}
+:root[data-theme='light'] .logo {
+  color: var(--text);
+}
+:root[data-theme='light'] .role,
+:root[data-theme='light'] .eyebrow {
+  color: #7587a0;
+}
+:root[data-theme='light'] .nav nav button,
+:root[data-theme='light'] .nav-tools button {
+  color: #52647c;
+}
+:root[data-theme='light'] .nav nav button b,
+:root[data-theme='light'] .nav-tools button svg {
+  color: #71839b;
+}
+:root[data-theme='light'] .nav nav button:hover:not(.active),
+:root[data-theme='light'] .nav-tools button:hover {
+  background: rgba(15, 27, 45, 0.06);
+  color: var(--text);
+}
+:root[data-theme='light'] .nav nav button.active {
+  background: rgba(7, 94, 219, 0.1);
+  color: #064bb0;
+}
+:root[data-theme='light'] .nav nav button.active b {
+  color: var(--green);
+}
+:root[data-theme='light'] .logout {
+  color: #6a7b92;
+}
+
+/* Barra flutuante */
+:root[data-theme='light'] .nav-dock {
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 16px 40px rgba(30, 50, 80, 0.22);
+}
+:root[data-theme='light'] .dock-btn {
+  color: #52647c;
+}
+:root[data-theme='light'] .dock-btn:hover {
+  background: rgba(15, 27, 45, 0.07);
+  color: var(--text);
+}
+:root[data-theme='light'] .dock-btn.active {
+  background: rgba(7, 94, 219, 0.12);
+  color: var(--green);
+  box-shadow: inset 0 0 0 1px rgba(7, 94, 219, 0.35);
+}
+
+/* Cartões e superfícies */
+:root[data-theme='light'] .post,
+:root[data-theme='light'] .athlete-card,
+:root[data-theme='light'] .profile-card,
+:root[data-theme='light'] .detail-box,
+:root[data-theme='light'] .chart-box,
+:root[data-theme='light'] .dashboard-cards > div,
+:root[data-theme='light'] .empty {
+  background: #ffffff;
+  box-shadow: 0 8px 24px var(--shadow);
+}
+:root[data-theme='light'] .athlete-card:hover {
+  border-color: rgba(7, 94, 219, 0.4);
+  box-shadow: 0 14px 32px rgba(30, 50, 80, 0.14);
+}
+:root[data-theme='light'] .stat,
+:root[data-theme='light'] .progress,
+:root[data-theme='light'] .tip,
+:root[data-theme='light'] .comment-item {
+  background: #f3f6fb;
+}
+:root[data-theme='light'] .icon-button,
+:root[data-theme='light'] .modal-close,
+:root[data-theme='light'] .media-pick button,
+:root[data-theme='light'] .role-pick button {
+  background: #eef2f8;
+}
+:root[data-theme='light'] .mini-avatar,
+:root[data-theme='light'] .avatar {
+  background: #e3ebf6;
+}
+:root[data-theme='light'] .profile-avatar {
+  background: #dce7f5;
+}
+:root[data-theme='light'] .empty span {
+  background: rgba(15, 27, 45, 0.05);
+}
+:root[data-theme='light'] .bar {
+  background: rgba(15, 27, 45, 0.09);
+}
+:root[data-theme='light'] .modal-box {
+  box-shadow: 0 20px 60px rgba(15, 27, 45, 0.25);
+}
+:root[data-theme='light'] .toast {
+  background: #ffffff;
+  color: var(--text);
+}
+:root[data-theme='light'] .dropdown-menu button:hover,
+:root[data-theme='light'] .notif-panel .notif-item:hover {
+  background: rgba(15, 27, 45, 0.05);
+}
+:root[data-theme='light'] .dropdown-menu button.danger {
+  color: #c2264b;
+}
+
+/* Textos que tinham cor clara fixa */
+:root[data-theme='light'] .post p,
+:root[data-theme='light'] .traits,
+:root[data-theme='light'] .detail-box p,
+:root[data-theme='light'] .notif-panel .notif-item,
+:root[data-theme='light'] .modal-box label,
+:root[data-theme='light'] .profile-edit-form label,
+:root[data-theme='light'] .eval-form label,
+:root[data-theme='light'] .login-box label {
+  color: #273a54;
+}
+:root[data-theme='light'] .post-actions button {
+  color: #41546f;
+}
+:root[data-theme='light'] .text-btn {
+  color: #1d5fb0;
+}
+
+/* Campos de formulário */
+:root[data-theme='light'] .modal-box textarea,
+:root[data-theme='light'] .comment-form input,
+:root[data-theme='light'] .profile-edit-form input,
+:root[data-theme='light'] .profile-edit-form select,
+:root[data-theme='light'] .profile-edit-form textarea,
+:root[data-theme='light'] .eval-form textarea,
+:root[data-theme='light'] .eval-form input,
+:root[data-theme='light'] .search input,
+:root[data-theme='light'] .story-caption,
+:root[data-theme='light'] .login-box input,
+:root[data-theme='light'] .filter-bar select {
+  background: #ffffff;
+}
+
+/* Botões */
+:root[data-theme='light'] .primary {
+  background: linear-gradient(135deg, #087cff, #30baff);
+}
+:root[data-theme='light'] .outline-btn {
+  background: #ffffff;
+  color: #1b2b44;
+}
+:root[data-theme='light'] .saved-btn,
+:root[data-theme='light'] .follow.on {
+  background: rgba(7, 94, 219, 0.12);
+  border-color: rgba(7, 94, 219, 0.45);
+  color: #064bb0;
+}
+:root[data-theme='light'] .follow {
+  border-color: rgba(7, 94, 219, 0.5);
+}
+:root[data-theme='light'] .role-pick button.chosen,
+:root[data-theme='light'] .media-pick button.chosen {
+  background: rgba(7, 94, 219, 0.12);
+  border-color: rgba(7, 94, 219, 0.5);
+  color: #064bb0;
+}
+:root[data-theme='light'] .search button,
+:root[data-theme='light'] .tip span,
+:root[data-theme='light'] .stat-card i {
+  background: rgba(7, 94, 219, 0.12);
+}
+
+/* Status, avisos e destaques */
+:root[data-theme='light'] .st-green {
+  background: rgba(16, 150, 100, 0.12);
+  color: #075edb;
+}
+:root[data-theme='light'] .st-gold {
+  background: rgba(202, 138, 4, 0.14);
+  color: #8a5a00;
+}
+:root[data-theme='light'] .form-error {
+  background: rgba(255, 111, 145, 0.1);
+  border-color: rgba(200, 40, 80, 0.3);
+  color: #b4234a;
+}
+:root[data-theme='light'] .story .ring {
+  background: #ffffff;
+}
+
+/* Comparador */
+:root[data-theme='light'] .compare-table-wrap {
+  background: #ffffff;
+  box-shadow: 0 12px 30px var(--shadow);
+}
+:root[data-theme='light'] .compare-corner {
+  background: #eef2f8;
+}
+:root[data-theme='light'] .compare-head {
+  background: linear-gradient(180deg, rgba(7, 94, 219, 0.08), #f3f6fb);
+}
+:root[data-theme='light'] .compare-avatar,
+:root[data-theme='light'] .compare-remove {
+  background: #ffffff;
+}
+:root[data-theme='light'] .compare-remove:hover {
+  color: #c2264b;
+  border-color: rgba(194, 38, 75, 0.5);
+}
+:root[data-theme='light'] .compare-row:nth-child(odd) .compare-cell {
+  background: rgba(15, 27, 45, 0.025);
+}
+:root[data-theme='light'] .compare-label {
+  background: #eef2f8 !important;
+}
+:root[data-theme='light'] .compare-best {
+  background: rgba(8, 124, 255, 0.16) !important;
+  color: #064bb0;
+}
+:root[data-theme='light'] .compare-best-tag {
+  background: #087cff;
+  color: #06101d;
+}
+
+/* Tela de login */
+:root[data-theme='light'] .lg-left {
+  background: radial-gradient(circle at 30% 35%, rgba(8, 124, 255, 0.14), transparent 45%), #e9eff8;
+}
+:root[data-theme='light'] .lg-left p {
+  color: #52647c;
+}
+:root[data-theme='light'] .lg-tag {
+  color: var(--green);
+  background: rgba(7, 94, 219, 0.12);
+}
+:root[data-theme='light'] .lg-chip {
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: 0 12px 30px rgba(30, 50, 80, 0.15);
+}
+
+/* ---------- Responsivo ---------- */
+@media (max-width: 900px) {
+  .nav-tools button,
+  .nav-tools .theme-toggle {
+    justify-content: center;
+    padding: 14px 5px;
+  }
+
+  .nav-tools button span {
+    display: none;
+  }
+
+  /* o botão "Sair" tinha font-size:0 e ficava invisível no menu estreito */
+  .logout::before {
+    content: '↪';
+    font-size: 20px;
+  }
+}
+
+@media (max-width: 520px) {
+  .nav-dock {
+    gap: 2px;
+    padding: 6px 8px;
+  }
+
+  .dock-btn {
+    flex-basis: 36px;
+    width: 36px;
+    height: 36px;
+  }
+
+  .dock-sep {
+    margin: 0 2px;
+  }
+}
+
+
+/* =====================================================================
+   Foto de perfil
+   ===================================================================== */
+.mini-avatar,
+.avatar,
+.profile-avatar,
+.compare-avatar,
+.story .ring {
+  overflow: hidden;
+}
+
+.mini-avatar img,
+.avatar img,
+.profile-avatar img,
+.compare-avatar img,
+.story .ring img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.mini-avatar.sm {
+  width: 30px;
+  height: 30px;
+  font-size: 16px;
+  flex: none;
+}
+
+.notif-panel .notif-item,
+.comment-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.notif-panel .notif-item > div:last-child,
+.comment-item > div:last-child {
+  min-width: 0;
+  flex: 1;
+}
+
+.mini-avatar.sm {
+  flex: none;
+  aspect-ratio: 1;
+}
+
+.story-delete {
+  display: block;
+  margin: 14px auto 0;
+  padding: 10px 18px;
+  border-radius: 10px;
+  background: rgba(255, 111, 145, 0.14);
+  border: 1px solid rgba(255, 111, 145, 0.4);
+  color: #ff8fa3;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.story-delete:hover {
+  background: rgba(255, 111, 145, 0.24);
+}
+
+.story-delete:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.profile-photo {
+  position: relative;
+  flex: none;
+  display: grid;
+  justify-items: center;
+  gap: 6px;
+}
+
+.photo-edit {
+  position: absolute;
+  top: 62px;
+  right: -4px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: 15px;
+  cursor: pointer;
+  background: var(--panel);
+  color: var(--text);
+  border: 1px solid var(--line);
+  box-shadow: 0 4px 12px var(--shadow, rgba(0, 0, 0, 0.3));
+  transition: transform 0.15s ease;
+}
+
+.photo-edit:hover {
+  transform: scale(1.1);
+}
+
+.photo-edit.busy {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.photo-remove {
+  font-size: 12px;
+  padding: 2px 6px;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+@media (max-width: 900px) {
+  .photo-edit {
+    top: 47px;
+  }
+}
+
+
